@@ -11,8 +11,7 @@ def extract_text(document):
 
         text += page.get_text() + "\n"
 
+    pdf.close()
+
     return text    
 
-info = extract_text(r"DATA/resume.pdf")
-
-print(info)
