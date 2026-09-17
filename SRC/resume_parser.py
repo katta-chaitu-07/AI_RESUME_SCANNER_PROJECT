@@ -5,6 +5,7 @@ def parse_resume(text):
 
     sections = {}
 
+    # Resume section headings we want to detect
     headings = [
         "SUMMARY",
         "EDUCATION",
@@ -15,7 +16,7 @@ def parse_resume(text):
         "ACHIEVEMENTS"
     ]
 
-    # Find all section headings
+    # Store the position of every heading found in the resume
     heading_positions = []
 
     for heading in headings:
@@ -29,22 +30,28 @@ def parse_resume(text):
                 (match.start(), match.end(), heading)
             )
 
-    # Arrange headings in the same order as they appear in the resume
+    # Sort headings according to their actual position in the resume
     heading_positions.sort(key=lambda x: x[0])
 
-    # Extract text between headings
+    # Extract the content between consecutive headings
     for i, (start, end, heading) in enumerate(heading_positions):
 
+        # If this is not the last heading,
+        # the next heading marks the end of this section
         if i + 1 < len(heading_positions):
 
             next_start = heading_positions[i + 1][0]
 
+        # If this is the last heading,
+        # extract everything until the end of the resume
         else:
 
             next_start = len(text)
 
+        # Extract section content
         content = text[end:next_start].strip()
 
+        # Store the section using lowercase heading as the key
         sections[heading.lower()] = content
 
     return sections
